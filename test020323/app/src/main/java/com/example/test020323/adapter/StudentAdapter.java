@@ -20,7 +20,7 @@ import java.util.List;
 public class StudentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final List<Student> studentList;
-    private LayoutInflater inflater;
+    private final LayoutInflater inflater;
 
     public StudentAdapter(LayoutInflater inflater, List<Student> studentList) {
         this.studentList = studentList;
@@ -54,14 +54,24 @@ public class StudentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+
         Student student = studentList.get(position);
 
-        ((MyViewHolder)holder).tvId.setText(student.getId() + "");
-        ((MyViewHolder)holder).tvName.setText(student.getName());
-        ((MyViewHolder)holder).tvAge.setText(student.getAge() + "");
-        ((MyViewHolder)holder).tvPhone.setText(student.getPhone());
-        ((MyViewHolder)holder).tvEmail.setText(student.getEmail());
+        ((MyViewHolder) holder).tvId.setText(student.getId() + "");
+        ((MyViewHolder) holder).tvName.setText(student.getName());
+        ((MyViewHolder) holder).tvAge.setText(student.getAge() + "");
+        ((MyViewHolder) holder).tvPhone.setText(student.getPhone());
+        ((MyViewHolder) holder).tvEmail.setText(student.getEmail());
 
+
+
+        /*for (int i = 0; i < studentList.size(); i++) {
+            ((MyViewHolder) holder).tvId.setText(studentList.get(i).getId() + "");
+            ((MyViewHolder) holder).tvName.setText(studentList.get(i).getName());
+            ((MyViewHolder) holder).tvAge.setText(studentList.get(i).getAge() + "");
+            ((MyViewHolder) holder).tvPhone.setText(studentList.get(i).getPhone());
+            ((MyViewHolder) holder).tvEmail.setText(studentList.get(i).getEmail());
+        }*/
     }
 
     @Override

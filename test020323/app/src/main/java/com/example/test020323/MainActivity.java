@@ -1,7 +1,10 @@
 package com.example.test020323;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
@@ -27,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
     private StudentAdapter adapter;
     private List<Student> studentList = new ArrayList<>();
 
+    private ItemTouchHelper.SimpleCallback simpleCallback;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,13 +52,41 @@ public class MainActivity extends AppCompatActivity {
 
         btnAdd = findViewById(R.id.btn_add);
 
+        simpleCallback = new ItemTouchHelper.SimpleCallback(
+                0,
+                ItemTouchHelper.LEFT
+        ) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                int position = viewHolder.getAdapterPosition();
+                Student student = studentList.get(position);
+
+                if (direction == ItemTouchHelper.LEFT) {
+                    studentDao.delete(student.getId());
+                    studentList.clear();
+                    studentList.addAll(studentDao.findAll());
+                    adapter.notifyDataSetChanged();
+                }
+            }
+
+        };
+
+        ItemTouchHelper touchHelper = new ItemTouchHelper(simpleCallback);
+        touchHelper.attachToRecyclerView(recyclerView);
+
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 Student student = new Student(
                         etName.getText().toString(),
-                        Integer.valueOf(etAge.getText().toString()),
+                        Integer.parseInt(etAge.getText().toString()),
                         etPhone.getText().toString(),
                         etEmail.getText().toString()
                 );
@@ -62,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
                 studentList.clear();
                 studentList.addAll(studentDao.findAll());
                 adapter.notifyDataSetChanged();
+
             }
         });
     }
