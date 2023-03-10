@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
@@ -14,11 +13,10 @@ import android.widget.EditText;
 
 import com.example.test020323.adapter.StudentAdapter;
 import com.example.test020323.dao.StudentDao;
-import com.example.test020323.dao.StudentDaoImpl;
+import com.example.test020323.dao.impl.StudentDaoImpl;
 import com.example.test020323.domain.Student;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {

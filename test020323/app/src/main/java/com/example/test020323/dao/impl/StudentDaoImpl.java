@@ -1,4 +1,4 @@
-package com.example.test020323.dao;
+package com.example.test020323.dao.impl;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.example.test020323.dao.StudentDao;
 import com.example.test020323.db.StudentContractReader;
 import com.example.test020323.db.StudentDbOpenHelper;
 import com.example.test020323.domain.Student;
@@ -46,7 +47,7 @@ public class StudentDaoImpl implements StudentDao {
 
 
         long index = sqLiteDatabase.insert(
-            StudentContractReader.StudentEntry.TABLE_NAME,
+                StudentContractReader.StudentEntry.TABLE_NAME,
                 null,
                 contentValues
         );
@@ -116,20 +117,21 @@ public class StudentDaoImpl implements StudentDao {
         );
 
         cursor.moveToFirst();
-        int columnIndexId = cursor.getColumnIndex(StudentContractReader.StudentEntry.COLUMN_ID);
         int columnIndexName = cursor.getColumnIndex(StudentContractReader.StudentEntry.COLUMN_NAME);
         int columnIndexAge = cursor.getColumnIndex(StudentContractReader.StudentEntry.COLUMN_AGE);
         int columnIndexPhone = cursor.getColumnIndex(StudentContractReader.StudentEntry.COLUMN_PHONE);
         int columnIndexEmail = cursor.getColumnIndex(StudentContractReader.StudentEntry.COLUMN_EMAIL);
 
+
         Student student = new Student(
-                cursor.getLong(columnIndexId),
+                id,
                 cursor.getString(columnIndexName),
                 cursor.getInt(columnIndexAge),
                 cursor.getString(columnIndexPhone),
                 cursor.getString(columnIndexEmail)
         );
-
+        cursor.close();
+        sqLiteDatabase.close();
         return student;
     }
 
@@ -156,11 +158,13 @@ public class StudentDaoImpl implements StudentDao {
                 StudentContractReader.StudentEntry.COLUMN_PHONE, newStudent.getPhone()
         );
 
+        sqLiteDatabase.close();
+
         return sqLiteDatabase.update(
                 StudentContractReader.StudentEntry.TABLE_NAME,
                 contentValues,
                 "id = ?",
-                new String[] {id + ""}
+                new String[]{id + ""}
         );
     }
 
@@ -169,10 +173,12 @@ public class StudentDaoImpl implements StudentDao {
 
         SQLiteDatabase sqLiteDatabase = openHelper.getWritableDatabase();
 
+        sqLiteDatabase.close();
+
         return sqLiteDatabase.delete(
                 StudentContractReader.StudentEntry.TABLE_NAME,
                 "id = ?",
-                new String[] {id + ""}
+                new String[]{id + ""}
         );
     }
 }
